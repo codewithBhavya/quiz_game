@@ -1,4 +1,6 @@
 import random
+print("welcome to the python quiz game")
+print("Note : if your spelling is wrong then the answer will be considered incorrect")
 questions = {
     "What is the full form of PHP": "personal home page",
     "what is the name of the founder of java": "james gosling",
