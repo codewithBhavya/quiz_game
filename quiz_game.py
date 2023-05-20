@@ -1,6 +1,8 @@
 import random
+import pygame
 print("welcome to the python quiz game")
 print("Note : if your spelling is wrong then the answer will be considered incorrect")
+pygame.mixer.init()
 questions = {
     "What is the full form of PHP": "personal home page",
     "what is the name of the founder of java": "james gosling",
@@ -72,9 +74,19 @@ for question in random_questions:
     user_response = input("your answer :")
     correct_response = questions[question]
     if user_response == correct_response:
+        sound_file = "correct_sound.mp3"
+        pygame.mixer.music.load(sound_file)
+        pygame.mixer.music.play()
+        while pygame.mixer.music.get_busy():
+            continue
         score +=1
         print("Congrats! you are absolutely correct")
     else:
+        sound_file = "wrong_sound.mp3"
+        pygame.mixer.music.load(sound_file)
+        pygame.mixer.music.play()
+        while pygame.mixer.music.get_busy():
+            continue
         print("You are wrong! try again")
         hint_user_input = input("Do you want a hint for this condition (Yes/No)")
         hint_user_choice = str(hint_user_input)
@@ -86,4 +98,4 @@ for question in random_questions:
 score_concatenate = str(score)
 print("your score is " + score_concatenate)
 percentage_score = str(score/10*100)
-print("Your score in the form of percentage is " + percentage_score)
+print("Your score in the form of percentage is " + percentage_score + "%")
