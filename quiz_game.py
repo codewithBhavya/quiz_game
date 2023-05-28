@@ -71,6 +71,7 @@ score = 0
 random_questions = random.sample(list(questions.keys()),10)
 for question in random_questions:
     print(question)
+    # the user should not be allowed to input any response once the timer is over Ex : 60 seconds
     user_response = input("your answer :")
     correct_response = questions[question]
     if user_response == correct_response:
@@ -95,6 +96,8 @@ for question in random_questions:
             print({hint})
         else:
             print("Ok please continue with the next question")
+# execution of the code snippet should be terminated automatically once the timer is over
+# A countdown should be displayed to the user at the top
 score_concatenate = str(score)
 print("your score is " + score_concatenate)
 percentage_score = str(score/10*100)
