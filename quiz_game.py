@@ -1,5 +1,7 @@
 import random
 import pygame
+from inputimeout import inputimeout, TimeoutOccurred  # Use module "inputimeout" (pip install inputimeout)
+
 print("welcome to the python quiz game")
 print("Note : if your spelling is wrong then the answer will be considered incorrect")
 pygame.mixer.init()
@@ -67,37 +69,42 @@ questions_hint = {
     "What is the smallest unit of measurement in a computer?": "It is the fundamental building block of digital information and is represented by a binary digit.",
     "What is the name of the operating system developed by Apple Inc.?": "Its name is inspired by a type of fruit commonly associated with knowledge or enlightenment."
 }
-score = 0 
+score = 0
+timer = 10  # in secs
 random_questions = random.sample(list(questions.keys()),10)
 for question in random_questions:
     print(question)
     # the user should not be allowed to input any response once the timer is over Ex : 60 seconds
-    user_response = input("your answer :")
-    correct_response = questions[question]
-    if user_response == correct_response:
-        sound_file = "correct_sound.mp3"
-        pygame.mixer.music.load(sound_file)
-        pygame.mixer.music.play()
-        while pygame.mixer.music.get_busy():
-            continue
-        score +=1
-        print("Congrats! you are absolutely correct")
-    else:
-        sound_file = "wrong_sound.mp3"
-        pygame.mixer.music.load(sound_file)
-        pygame.mixer.music.play()
-        while pygame.mixer.music.get_busy():
-            continue
-        print("You are wrong! try again")
-        hint_user_input = input("Do you want a hint for this condition (Yes/No)")
-        hint_user_choice = str(hint_user_input)
-        hint = questions_hint.get(question)
-        if hint_user_input == "yes":
-            print({hint})
+    try:
+        user_response = inputimeout(prompt="your answer :", timeout=timer)  # instead of using "input" use "inputimeout" object. prompt = the prompt, timeout = input time limit in seconds
+        correct_response = questions[question]
+        if user_response == correct_response:
+            sound_file = "correct_sound.mp3"
+            pygame.mixer.music.load(sound_file)
+            pygame.mixer.music.play()
+            while pygame.mixer.music.get_busy():
+                continue
+            score +=1
+            print("Congrats! you are absolutely correct")
         else:
-            print("Ok please continue with the next question")
+            sound_file = "wrong_sound.mp3"
+            pygame.mixer.music.load(sound_file)
+            pygame.mixer.music.play()
+            while pygame.mixer.music.get_busy():
+                continue
+            print("You are wrong! try again")
+            hint_user_input = input("Do you want a hint for this condition (Yes/No)")
+            hint_user_choice = str(hint_user_input)
+            hint = questions_hint.get(question)
+            if hint_user_input == "yes":
+                print({hint})
+            else:
+                print("Ok please continue with the next question")
+    except TimeoutOccurred:  # this block will be executed when the timer ends
+        print('Time is up!')
+        continue
 # execution of the code snippet should be terminated automatically once the timer is over
-# A countdown should be displayed to the user at the top
+# A countdown should be displayed to the user at the top -- Displaying a countdown timer at the top in the terminal is not possible since python prints wherever the cursor is. If you want to display a countdown timer at the top, you will need UI.
 score_concatenate = str(score)
 print("your score is " + score_concatenate)
 percentage_score = str(score/10*100)
